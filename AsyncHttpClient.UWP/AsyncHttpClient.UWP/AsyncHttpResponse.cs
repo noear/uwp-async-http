@@ -44,13 +44,19 @@ namespace Noear.UWP.Http {
             return data;
         }
 
-        public  byte[] GetBytes() {
-            return  WindowsRuntimeBufferExtensions.ToArray(data, 0, (int)data.Length);
+        public byte[] GetBytes() {
+            if (data == null)
+                return null;
+            else
+                return WindowsRuntimeBufferExtensions.ToArray(data, 0, (int)data.Length);
         }
 
-        public  string GetString() {
+        public string GetString() {
             var bytes = GetBytes();
-            return  this.Encoding.GetString(bytes);
+            if (bytes == null)
+                return null;
+            else
+                return this.Encoding.GetString(bytes);
         }
 
         public void Dispose() {
