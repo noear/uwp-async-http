@@ -13,6 +13,7 @@ Noear.UWP.Http{
 }
 ```
 
+示例代码：
 ```java
 //GET DEMO
 var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
