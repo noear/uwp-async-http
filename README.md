@@ -1,7 +1,5 @@
 # uwp-async-http
 
-Windows.Web.Http 的简化封装
-
 在使用Windows.Web.Http时，觉得涉及Cookie及编码操作时比较麻烦
 所以就封装了AsyncHttpClient
 
