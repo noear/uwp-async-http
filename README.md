@@ -20,7 +20,7 @@ var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
 
 return rsp.GetString();
 
-//GET AND HttpHeader,Cookie DEMO
+//Request HttpHeader,Cookie DEMO
 var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
     .Header("Referer",referer)
     .Header("User-Agent","xxxxxxxxxx")
