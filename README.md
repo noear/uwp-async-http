@@ -35,7 +35,7 @@ return rsp.GetBytes();
 Dictionary<string, string> postData = new Dictionary<string, string>();
 postData.Add("OrderID", "1");
 
-var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
+var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/post")
     .Post(postData);
 
 return rsp.GetString();
@@ -44,7 +44,7 @@ return rsp.GetString();
 Dictionary<string, string> postData = new Dictionary<string, string>();
 postData.Add("OrderID", "1");
 
-var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
+var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/post")
     .Post(postData);
 
 if (rsp.StatusCode == HttpStatusCode.Ok) {
