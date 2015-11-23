@@ -84,7 +84,7 @@ namespace Noear.UWP.Http
                 client = new HttpClient();
             }
 
-            client.DefaultRequestHeaders.Add("Encoding", encoding);
+            client.DefaultRequestHeaders.Add("Encoding", _encoding);
 
             if (_headers != null) {
                 foreach (var kv in _headers) {
