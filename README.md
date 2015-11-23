@@ -31,4 +31,17 @@ var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
 
 return rsp.GetString();
 
+//Response DEMO
+Dictionary<string, string> postData = new Dictionary<string, string>();
+postData.Add("OrderID", "1");
+
+var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
+    .Post(postData);
+
+if (rsp.StatusCode == HttpStatusCode.Ok) {
+    string text = rsp.GetString();
+    string name = rsp.Headers["name"];
+    string cokie = rsp.Cookies;
+}
+
 ```
