@@ -1,7 +1,5 @@
 # uwp-async-http
 
-Windows.Web.Http 的简化封装
-
 在使用Windows.Web.Http时，觉得涉及Cookie及编码操作时比较麻烦
 所以就封装了AsyncHttpClient
 
@@ -22,7 +20,7 @@ var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
 
 return rsp.GetString();
 
-//GET AND HttpHeader,Cookie DEMO
+//Request HttpHeader,Cookie DEMO
 var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
     .Header("Referer",referer)
     .Header("User-Agent","xxxxxxxxxx")
@@ -35,7 +33,7 @@ return rsp.GetBytes();
 Dictionary<string, string> postData = new Dictionary<string, string>();
 postData.Add("OrderID", "1");
 
-var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
+var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/post")
     .Post(postData);
 
 return rsp.GetString();
@@ -44,7 +42,7 @@ return rsp.GetString();
 Dictionary<string, string> postData = new Dictionary<string, string>();
 postData.Add("OrderID", "1");
 
-var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
+var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/post")
     .Post(postData);
 
 if (rsp.StatusCode == HttpStatusCode.Ok) {
