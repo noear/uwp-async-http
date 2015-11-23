@@ -19,7 +19,7 @@ namespace Noear.UWP.Http
             _url = url;
             return this;
         }
-
+        
         public AsyncHttpClient Header(string name, string value) {
             if (_headers == null) {
                 _headers = new Dictionary<string, string>();

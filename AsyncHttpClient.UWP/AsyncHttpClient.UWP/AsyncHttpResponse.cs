@@ -40,15 +40,15 @@ namespace Noear.UWP.Http {
             }
         }
 
-        public virtual IBuffer getBuffer() {
+        public  IBuffer getBuffer() {
             return data;
         }
 
-        public virtual byte[] GetBytes() {
+        public  byte[] GetBytes() {
             return  WindowsRuntimeBufferExtensions.ToArray(data, 0, (int)data.Length);
         }
 
-        public virtual string GetString() {
+        public  string GetString() {
             var bytes = GetBytes();
             return  this.Encoding.GetString(bytes);
         }
