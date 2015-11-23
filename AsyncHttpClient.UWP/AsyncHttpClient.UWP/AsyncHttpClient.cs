@@ -14,12 +14,20 @@ namespace Noear.UWP.Http
         private string _url;
         private Dictionary<string, string> _headers;
         private Dictionary<string, string> _cookies;
-        
+        private string _encoding;
+
         public AsyncHttpClient Url(string url) {
             _url = url;
             return this;
         }
-        
+
+       
+        public AsyncHttpClient Encoding(string encoding) {
+            _encoding = encoding;
+            return this;
+        }
+
+       
         public AsyncHttpClient Header(string name, string value) {
             if (_headers == null) {
                 _headers = new Dictionary<string, string>();
@@ -28,7 +36,7 @@ namespace Noear.UWP.Http
             
             return this;
         }
-
+        
         public AsyncHttpClient Cookie(string name, string value) {
             if (_cookies == null) {
                 _cookies = new Dictionary<string, string>();
@@ -38,33 +46,29 @@ namespace Noear.UWP.Http
             return this;
         }
 
-        public async Task<AsyncHttpResponse> Get(string encoding) {
-            if (string.IsNullOrEmpty(encoding)) {
-                encoding = "UTF-8";
-            }
-
-            var client = DoBuildHttpClient(encoding);
+        public async Task<AsyncHttpResponse> Get() {
+            var client = DoBuildHttpClient();
 
             using (var rsp = await client.GetAsync(new Uri(_url))) {
-                return new AsyncHttpResponse(rsp, encoding);
+                return new AsyncHttpResponse(rsp, _encoding);
             }
         }
         
-        public async Task<AsyncHttpResponse> Post(string encoding, Dictionary<string, string> args) {
-            if (string.IsNullOrEmpty(encoding)) {
-                encoding = "UTF-8";
-            }
-
-            var client = DoBuildHttpClient( encoding);
+        public async Task<AsyncHttpResponse> Post(Dictionary<string, string> args) {
+            var client = DoBuildHttpClient();
 
             var postData = new HttpFormUrlEncodedContent(args);
             
             using (var rsp = await client.PostAsync(new Uri(_url), postData)) {
-                return new AsyncHttpResponse(rsp, encoding);
+                return new AsyncHttpResponse(rsp, _encoding);
             }
         }
 
-        private HttpClient DoBuildHttpClient(string encoding) {
+        private HttpClient DoBuildHttpClient() {
+            if (string.IsNullOrEmpty(_encoding)) {
+                _encoding = "UTF-8";
+            }
+
             HttpClient client = null;
             if (_cookies != null) {
                 var bpf = new HttpBaseProtocolFilter();
