@@ -6,10 +6,12 @@ Windows.Web.Http 的简化封装
 所以就封装了AsyncHttpClient
 
 文件结构：
+```javascript
 Noear.UWP.Http{
     AsyncHttpClient
     AsyncHttpResponse
 }
+```
 
 ```java
 //GET DEMO
