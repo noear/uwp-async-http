@@ -27,13 +27,13 @@ namespace Noear.UWP.Http
             return this;
         }
 
-       
+
         public AsyncHttpClient Header(string name, string value) {
             if (_headers == null) {
                 _headers = new Dictionary<string, string>();
             }
-            _headers.Add(name, value);
-            
+            _headers[name] = value;
+
             return this;
         }
         
@@ -41,7 +41,7 @@ namespace Noear.UWP.Http
             if (_cookies == null) {
                 _cookies = new Dictionary<string, string>();
             }
-            _cookies.Add(name, value);
+            _cookies[name] = value;
 
             return this;
         }
