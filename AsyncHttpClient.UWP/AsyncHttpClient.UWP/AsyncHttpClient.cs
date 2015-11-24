@@ -46,6 +46,22 @@ namespace Noear.UWP.Http
             return this;
         }
 
+        public AsyncHttpClient Cookies(string cookies) {
+            if (string.IsNullOrEmpty(cookies) == false) {
+                foreach (var kv in cookies.Split(new[] { ';', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)) {
+                    if (kv.IndexOf('=') > 0) {
+                        var name = kv.Split('=')[0].Trim();
+                        var value = kv.Split('=')[1].Trim();
+                        Cookie(name, value);
+                    }
+                }
+            }
+
+            return this;
+        }
+
+
+
         public async Task<AsyncHttpResponse> Get() {
             var client = DoBuildHttpClient();
 
@@ -73,8 +89,21 @@ namespace Noear.UWP.Http
             if (_cookies != null) {
                 var bpf = new HttpBaseProtocolFilter();
                 var cm = bpf.CookieManager;
+
+                string domain = null;
+                if (_cookies.ContainsKey("Domain"))
+                    domain = _cookies["Domain"];
+                else if (_cookies.ContainsKey("domain"))
+                    domain = _cookies["domain"];
+                else
+                    domain = new Uri(_url).Host;
+
                 foreach (var kv in _cookies) {
-                    var cookie = new HttpCookie(kv.Key, _url, "/") { Value = kv.Value };
+                    var key = kv.Key.ToLower();
+                    if (key == "domain" || key == "path" || key == "expires")
+                        continue;
+
+                    var cookie = new HttpCookie(kv.Key.Trim(), domain, "/") { Value = kv.Value.Trim() };
                     cm.SetCookie(cookie);
                 }
 
@@ -85,6 +114,10 @@ namespace Noear.UWP.Http
             }
 
             client.DefaultRequestHeaders.Add("Encoding", _encoding);
+
+            
+
+           
 
             if (_headers != null) {
                 foreach (var kv in _headers) {
