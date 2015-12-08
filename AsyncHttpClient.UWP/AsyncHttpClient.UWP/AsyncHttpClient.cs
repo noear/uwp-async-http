@@ -65,8 +65,13 @@ namespace Noear.UWP.Http
         public async Task<AsyncHttpResponse> Get() {
             var client = DoBuildHttpClient();
 
-            using (var rsp = await client.GetAsync(new Uri(_url))) {
-                return new AsyncHttpResponse(rsp, _encoding);
+            try {
+                using (var rsp = await client.GetAsync(new Uri(_url))) {
+                    return new AsyncHttpResponse(rsp, _encoding);
+                }
+            }
+            catch (Exception ex) {
+                return new AsyncHttpResponse(ex, _encoding);
             }
         }
         
@@ -74,9 +79,14 @@ namespace Noear.UWP.Http
             var client = DoBuildHttpClient();
 
             var postData = new HttpFormUrlEncodedContent(args);
-            
-            using (var rsp = await client.PostAsync(new Uri(_url), postData)) {
-                return new AsyncHttpResponse(rsp, _encoding);
+
+            try {
+                using (var rsp = await client.PostAsync(new Uri(_url), postData)) {
+                    return new AsyncHttpResponse(rsp, _encoding);
+                }
+            }
+            catch (Exception ex) {
+                return new AsyncHttpResponse(ex, _encoding);
             }
         }
 
@@ -114,9 +124,6 @@ namespace Noear.UWP.Http
             }
 
             client.DefaultRequestHeaders.Add("Encoding", _encoding);
-
-            
-
            
 
             if (_headers != null) {

@@ -15,13 +15,23 @@ namespace Noear.UWP.Http {
         public string Cookies { get; private set; }
         public HttpStatusCode StatusCode { get; private set; }
         public Encoding Encoding { get; private set; }
+        public Exception Exception { get; private set; }
 
         internal AsyncHttpResponse(HttpResponseMessage rsp, string encoding) {
             this.StatusCode = rsp.StatusCode;
             this.Encoding   = Encoding.GetEncoding(encoding);
             this.Headers    = new Dictionary<string, string>();
             this.Cookies    = null;
+            this.Exception  = null;
             init(rsp);
+        }
+
+        internal AsyncHttpResponse(Exception exp, string encoding) {
+            this.StatusCode =  HttpStatusCode.None;
+            this.Encoding = Encoding.GetEncoding(encoding);
+            this.Headers = new Dictionary<string, string>();
+            this.Cookies = null;
+            this.Exception = exp;
         }
 
         protected async void  init(HttpResponseMessage rsp) {
@@ -41,7 +51,10 @@ namespace Noear.UWP.Http {
         }
 
         public  IBuffer getBuffer() {
-            return data;
+            if (this.Exception == null)
+                return data;
+            else
+                return null;
         }
 
         public byte[] GetBytes() {
@@ -64,6 +77,7 @@ namespace Noear.UWP.Http {
             Headers = null;
             Cookies = null;
             Encoding = null;
+            Exception = null;
         }
     }
 }
