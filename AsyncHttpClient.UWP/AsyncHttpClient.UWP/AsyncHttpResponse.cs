@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
-using System.Threading.Tasks;
 using Windows.Storage.Streams;
-using Windows.Web.Http;
 
 namespace Noear.UWP.Http {
     public class AsyncHttpResponse :IDisposable{
-        protected IBuffer data { get; private set; }
+        protected byte[] data { get; private set; }
 
         public Dictionary<string, string> Headers { get; private set; }
         public string Cookies { get; private set; }
@@ -19,57 +18,56 @@ namespace Noear.UWP.Http {
 
         internal AsyncHttpResponse(HttpResponseMessage rsp, string encoding) {
             this.StatusCode = rsp.StatusCode;
-            this.Encoding   = Encoding.GetEncoding(encoding);
-            this.Headers    = new Dictionary<string, string>();
-            this.Cookies    = null;
-            this.Exception  = null;
+            this.Encoding = Encoding.GetEncoding(encoding ?? "UTF-8");
+            this.Headers = new Dictionary<string, string>();
+            this.Cookies = null;
+            this.Exception = null;
             init(rsp);
         }
 
         internal AsyncHttpResponse(Exception exp, string encoding) {
-            this.StatusCode =  HttpStatusCode.None;
-            this.Encoding = Encoding.GetEncoding(encoding);
+            this.StatusCode = 0;
+            this.Encoding = Encoding.GetEncoding(encoding ?? "UTF-8");
             this.Headers = new Dictionary<string, string>();
             this.Cookies = null;
             this.Exception = exp;
         }
 
         protected async void  init(HttpResponseMessage rsp) {
-            if (rsp.StatusCode == HttpStatusCode.Ok) {
-                data = await rsp.Content.ReadAsBufferAsync();
+            if (rsp.StatusCode == HttpStatusCode.OK) {
+                data = await rsp.Content.ReadAsByteArrayAsync();
             }
 
             if (rsp.Headers != null) {
                 foreach (var kv in rsp.Headers) {
                     if ("Set-Cookie".Equals(kv.Key)) {
-                        Cookies = kv.Value;
+                        Cookies = string.Join(";",kv.Value);
                     }
 
-                    Headers.Add(kv.Key, kv.Value);
+                    Headers[kv.Key] = string.Join(";", kv.Value);
                 }
             }
         }
 
         public  IBuffer getBuffer() {
-            if (this.Exception == null)
-                return data;
-            else
+            if (data == null)
                 return null;
+            else
+                return WindowsRuntimeBufferExtensions.AsBuffer(data);
         }
 
         public byte[] GetBytes() {
             if (data == null)
                 return null;
             else
-                return WindowsRuntimeBufferExtensions.ToArray(data, 0, (int)data.Length);
+                return data;
         }
 
         public string GetString() {
-            var bytes = GetBytes();
-            if (bytes == null)
+            if (data == null)
                 return null;
             else
-                return this.Encoding.GetString(bytes);
+                return Encoding.GetString(data);
         }
 
         public void Dispose() {
