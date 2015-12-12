@@ -22,9 +22,9 @@ return rsp.GetString();
 
 //Request HttpHeader,Cookie DEMO
 var rsp = await new AsyncHttpClient().Url("http://api.xxx.ddd/get")
-    .Header("Referer",referer)
-    .Header("User-Agent","xxxxxxxxxx")
-    .Cookie("userID","1")
+    .Referer(referer)
+    .UserAgent("xxxxxxxxxx")
+    .Cookies("userID=1")
     .Get();
 
 return rsp.GetBytes();
